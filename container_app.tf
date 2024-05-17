@@ -26,7 +26,7 @@ resource "azurerm_container_app" "enrichment_app" {
   identity {
     type = "UserAssigned"
     identity_ids = [
-      data.azurerm_user_assigned_identity.identity.id
+      azurerm_user_assigned_identity.app_identity.principal_id
     ]
   }
 
@@ -52,7 +52,7 @@ resource "azurerm_container_app" "enrichment_app" {
       }
       env {
         name  = "AZURE_CLIENT_ID"
-        value = data.azurerm_user_assigned_identity.identity.client_id
+        value = azurerm_user_assigned_identity.app_identity.client_id
       }
       env {
         name  = "CONTAINER_NAME"

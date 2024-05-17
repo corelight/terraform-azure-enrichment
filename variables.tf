@@ -155,6 +155,19 @@ variable "app_log_retention" {
   default     = 30
 }
 
+
+variable "app_identity_name" {
+  description = "The name of the user assignment identity which the Container App will run as"
+  type        = string
+  default     = "corelight-enrichment-user"
+}
+
+variable "enrichment_role_definition_name" {
+  description = "The name of the custom Corelight enrichment role definition"
+  type        = string
+  default     = "corelight-enrichment-role"
+}
+
 variable "tags" {
   description = "Any tags that should be applied to resources deployed by the module"
   type        = object({})
