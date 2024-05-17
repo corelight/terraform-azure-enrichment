@@ -14,11 +14,6 @@ variable "location" {
   type        = string
 }
 
-variable "user_assigned_identity_name" {
-  description = "The user assigned identity name authorized to run enrichment workflows"
-  type        = string
-}
-
 variable "enrichment_storage_account" {
   description = "The storage account where enrichment data will be centralized"
   type        = string
