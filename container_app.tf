@@ -26,7 +26,7 @@ resource "azurerm_container_app" "enrichment_app" {
   identity {
     type = "UserAssigned"
     identity_ids = [
-      azurerm_user_assigned_identity.app_identity.principal_id
+      azurerm_user_assigned_identity.app_identity.id
     ]
   }
 
