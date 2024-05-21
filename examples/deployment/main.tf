@@ -1,5 +1,5 @@
 locals {
-  subscription_id = "12345" # Your Azure Subscription ID (UUID)
+  subscription_id     = "12345" # Your Azure Subscription ID (UUID)
   resource_group_name = "corelight"
   deployment_location = "eastus"
   tags = {
@@ -9,7 +9,7 @@ locals {
   }
 }
 
-data azurerm_subscription "subscription" {
+data "azurerm_subscription" "subscription" {
   subscription_id = local.subscription_id
 }
 
@@ -57,22 +57,11 @@ resource "azurerm_storage_container" "enrichment_bucket" {
 }
 
 ####################################################################################################
-# Create the Corelight user assigned identity and assign it the custom role granting the least
-# privilege necessary to run enrichment workflows
-####################################################################################################
-module "corelight_identity" {
-  source = "../../modules/iam"
-
-  corelight_resource_group_name = azurerm_resource_group.corelight_resource_group.name
-  location                      = local.deployment_location
-  subscription_id               = local.subscription_id
-}
-
-####################################################################################################
 # Deploy the Container App and its supporting infrastructure
+# Replace relative source with "source = github.com/corelight/terraform-azure-enrichment"
 ####################################################################################################
 module "enrichment" {
-  source = "../../modules/enrichment"
+  source = "../.."
 
   resource_group_name                  = azurerm_resource_group.corelight_resource_group.name
   enrichment_storage_account           = azurerm_storage_account.enrichment_data.name
@@ -80,20 +69,6 @@ module "enrichment" {
   event_grid_system_topic_name         = azurerm_eventgrid_system_topic.system_topic.name
   location                             = local.deployment_location
   subscription_id                      = local.subscription_id
-  user_assigned_identity_name          = module.corelight_identity.user_assigned_identity_name
-
-  depends_on = [
-    time_sleep.wait_30_seconds
-  ]
 
   tags = local.tags
-}
-
-# Need to wait for role assignment to permeate Azure backend
-resource "time_sleep" "wait_30_seconds" {
-  depends_on = [
-    module.corelight_identity
-  ]
-
-  create_duration = "30s"
 }
