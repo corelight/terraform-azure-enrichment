@@ -92,7 +92,7 @@ variable "app_sku" {
 variable "app_env_locations" {
   description = "The Azure locations the Container App should collect cloud resource data"
   type        = list(string)
-  default     = [
+  default = [
     "eastus",
     "eastus2",
     "southcentralus",
@@ -165,5 +165,5 @@ variable "enrichment_role_definition_name" {
 variable "tags" {
   description = "Any tags that should be applied to resources deployed by the module"
   type        = object({})
-  default = {}
+  default     = {}
 }
