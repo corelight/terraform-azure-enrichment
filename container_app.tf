@@ -24,9 +24,9 @@ resource "azurerm_container_app" "enrichment_app" {
   revision_mode                = "Single"
 
   identity {
-    type         = "UserAssigned"
+    type = "UserAssigned"
     identity_ids = [
-      data.azurerm_user_assigned_identity.identity.id
+      azurerm_user_assigned_identity.app_identity.id
     ]
   }
 
@@ -52,7 +52,7 @@ resource "azurerm_container_app" "enrichment_app" {
       }
       env {
         name  = "AZURE_CLIENT_ID"
-        value = data.azurerm_user_assigned_identity.identity.client_id
+        value = azurerm_user_assigned_identity.app_identity.client_id
       }
       env {
         name  = "CONTAINER_NAME"
@@ -78,4 +78,17 @@ resource "azurerm_container_app" "enrichment_app" {
   }
 
   tags = var.tags
+
+  depends_on = [
+    time_sleep.wait_30_seconds
+  ]
+}
+
+resource "time_sleep" "wait_30_seconds" {
+  depends_on = [
+    azurerm_role_assignment.service_bus_role_assignment,
+    azurerm_role_assignment.enrichment_role_assignment,
+  ]
+
+  create_duration = "30s"
 }

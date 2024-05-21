@@ -10,7 +10,7 @@ resource "azurerm_eventgrid_system_topic_event_subscription" "event_subscription
       values = ["/providers/Microsoft.Compute/virtualMachines/"]
     }
     string_in {
-      key    = "data.operationName"
+      key = "data.operationName"
       values = [
         "Microsoft.Compute/virtualMachines/start/action",
         "Microsoft.Compute/virtualMachines/deallocate/action"

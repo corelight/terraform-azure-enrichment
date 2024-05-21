@@ -21,3 +21,15 @@ output "service_bus_namespace_name" {
 output "service_bus_queue_name" {
   value = azurerm_servicebus_queue.state_change_queue.name
 }
+
+output "user_assigned_identity_name" {
+  value = azurerm_user_assigned_identity.app_identity.name
+}
+
+output "user_assigned_identity_principal_id" {
+  value = azurerm_user_assigned_identity.app_identity.principal_id
+}
+
+output "corelight_role_definition_id" {
+  value = azurerm_role_definition.enrichment_role_def.id
+}
