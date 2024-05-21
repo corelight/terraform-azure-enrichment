@@ -30,3 +30,9 @@ resource "azurerm_role_assignment" "service_bus_role_assignment" {
   scope                = azurerm_servicebus_queue.state_change_queue.id
   role_definition_name = "Azure Service Bus Data Receiver"
 }
+
+resource "azurerm_role_assignment" "enrichment_storage_account_assignment" {
+  principal_id         = azurerm_user_assigned_identity.app_identity.principal_id
+  scope                = data.azurerm_storage_account.enrichment_storage_account.id
+  role_definition_name = "Storage Blob Data Contributor"
+}
