@@ -38,6 +38,6 @@ resource "azurerm_role_assignment" "enrichment_storage_account_assignment" {
 }
 
 resource "azurerm_role_assignment" "system_topic_service_bus_assignment" {
-  principal_id = data.azurerm_eventgrid_system_topic.system_topic.identity.principal_id
+  principal_id = data.azurerm_eventgrid_system_topic.system_topic.identity[0].principal_id
   scope        = azurerm_servicebus_queue.state_change_queue.id
 }
