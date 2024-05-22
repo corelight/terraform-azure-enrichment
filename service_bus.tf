@@ -1,10 +1,11 @@
 resource "azurerm_servicebus_namespace" "state_change_bus" {
-  location            = var.location
-  name                = var.service_bus_name
-  resource_group_name = var.resource_group_name
-  sku                 = "Standard"
-  local_auth_enabled  = false
-  minimum_tls_version = "1.2"
+  location                      = var.location
+  name                          = var.service_bus_name
+  resource_group_name           = var.resource_group_name
+  sku                           = "Standard"
+  local_auth_enabled            = false
+  minimum_tls_version           = "1.2"
+  public_network_access_enabled = false
 
   network_rule_set {
     trusted_services_allowed = true
