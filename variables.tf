@@ -28,11 +28,6 @@ variable "event_grid_system_topic_name" {
   type        = string
 }
 
-variable "event_grid_system_topic_resource_group" {
-  description = "The resource group of the subscription event grid system topic"
-  type        = string
-}
-
 
 ## Variables with defaults
 variable "image_name" {
