@@ -88,6 +88,7 @@ resource "time_sleep" "wait_30_seconds" {
   depends_on = [
     azurerm_role_assignment.service_bus_role_assignment,
     azurerm_role_assignment.enrichment_role_assignment,
+    azurerm_role_assignment.enrichment_storage_account_assignment,
   ]
 
   create_duration = "30s"

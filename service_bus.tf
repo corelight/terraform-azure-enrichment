@@ -3,13 +3,10 @@ resource "azurerm_servicebus_namespace" "state_change_bus" {
   name                = var.service_bus_name
   resource_group_name = var.resource_group_name
   sku                 = "Standard"
-  local_auth_enabled  = false
   minimum_tls_version = "1.2"
 
   network_rule_set {
-    ip_rules = [
-      azurerm_container_app_environment.enrichment_app_env.static_ip_address
-    ]
+    trusted_services_allowed = true
   }
 
   tags = var.tags
