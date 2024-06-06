@@ -163,7 +163,7 @@ variable "enrichment_role_definition_name" {
 }
 
 variable "tags" {
-  description = "Any tags that should be applied to resources deployed by the module"
+  description = "(optional) Any tags that should be applied to resources deployed by the module"
   type        = object({})
   default     = {}
 }
