@@ -2,6 +2,8 @@
 
 Terraform for Corelight's Azure Cloud Enrichment.
 
+<img src="docs/overview.svg" alt="overview">
+
 ## Getting Started
 
 Corelight's Azure Cloud Enrichment requires the deployment of an Azure Container App and its
