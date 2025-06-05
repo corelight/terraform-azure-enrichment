@@ -1,0 +1,38 @@
+name: Terraform Security Scan
+
+on:
+  pull_request:
+    paths:
+      - '**.tf'
+      - '**.tfvars'
+  push:
+    branches:
+      - main
+    paths:
+      - '**.tf'
+      - '**.tfvars'
+
+jobs:
+  security-scan:
+    name: Run tfsec
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.5.7"
+
+      - name: Run tfsec
+        uses: aquasecurity/tfsec-action@v1.0.11
+        with:
+          working_dir: ${{ github.workspace }}
+          soft_fail: false
+          minimum_severity: HIGH
+          custom_args: --no-color 

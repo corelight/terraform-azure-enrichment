@@ -1,0 +1,72 @@
+name: Nightly Security Scan
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs at 00:00 UTC every day
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  security-scan:
+    name: Run Security Scans
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.5.7"
+
+      - name: Run tfsec
+        id: tfsec
+        uses: aquasecurity/tfsec-action@v1.0.11
+        with:
+          working_dir: ${{ github.workspace }}
+          soft_fail: true  # Don't fail the workflow, we'll handle the result
+          minimum_severity: HIGH
+          custom_args: --no-color
+          format: json
+          output_path: tfsec-results.json
+
+      - name: Check for vulnerabilities
+        id: check-vulns
+        run: |
+          if [ -f tfsec-results.json ]; then
+            VULN_COUNT=$(jq '.results | length' tfsec-results.json)
+            if [ "$VULN_COUNT" -gt 0 ]; then
+              echo "vulns_found=true" >> $GITHUB_OUTPUT
+              echo "vuln_count=$VULN_COUNT" >> $GITHUB_OUTPUT
+              echo "vuln_details=$(cat tfsec-results.json)" >> $GITHUB_OUTPUT
+            else
+              echo "vulns_found=false" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "vulns_found=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Security Report PR
+        if: steps.check-vulns.outputs.vulns_found == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Security scan results - $(date +'%Y-%m-%d')"
+          title: "Security Scan Results - $(date +'%Y-%m-%d')"
+          body: |
+            ## Security Scan Results
+            
+            Found ${{ steps.check-vulns.outputs.vuln_count }} high/critical vulnerabilities.
+            
+            ### Vulnerabilities Details:
+            ```json
+            ${{ steps.check-vulns.outputs.vuln_details }}
+            ```
+            
+            Please review and address these security issues.
+          branch: security-scan-results
+          base: main
+          delete-branch: true 
