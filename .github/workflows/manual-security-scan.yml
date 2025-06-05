@@ -2,13 +2,6 @@ name: Manual Security Scan
 
 on:
   workflow_dispatch:
-    inputs:
-      branch:
-        description: 'Branch to scan'
-        required: true
-        default: 'iac-scanning'
-        type: string
-
 jobs:
   security-scan:
     name: Run Security Scan
