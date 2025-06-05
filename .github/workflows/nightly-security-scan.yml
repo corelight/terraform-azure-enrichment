@@ -8,8 +8,11 @@ on:
       branch:
         description: 'Branch to scan'
         required: true
-        default: 'main'
-        type: string
+        default: 'iac-scanning'
+        type: choice
+        options:
+          - iac-scanning
+          - main
       test_only:
         description: 'Run in test mode (no PR creation)'
         required: false
@@ -28,7 +31,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.branch || 'main' }}
+          ref: ${{ github.event.inputs.branch }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3

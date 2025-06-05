@@ -2,9 +2,9 @@ name: Terraform Security Scan
 
 on:
   pull_request:
-    paths:
-      - '**.tf'
-      - '**.tfvars'
+    # paths:
+      # - '**.tf'
+      # - '**.tfvars'
   push:
     branches:
       - main
