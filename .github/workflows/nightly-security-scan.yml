@@ -3,7 +3,18 @@ name: Nightly Security Scan
 on:
   schedule:
     - cron: '0 0 * * *'  # Runs at 00:00 UTC every day
-  workflow_dispatch:  # Allows manual triggering
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to scan'
+        required: true
+        default: 'main'
+        type: string
+      test_only:
+        description: 'Run in test mode (no PR creation)'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   security-scan:
@@ -16,6 +27,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || 'main' }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -50,7 +63,7 @@ jobs:
           fi
 
       - name: Create Security Report PR
-        if: steps.check-vulns.outputs.vulns_found == 'true'
+        if: steps.check-vulns.outputs.vulns_found == 'true' && !github.event.inputs.test_only
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
