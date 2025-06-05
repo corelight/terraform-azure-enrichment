@@ -42,10 +42,8 @@ jobs:
         id: tfsec
         uses: aquasecurity/tfsec-action@v1.0.3
         with:
-          working_dir: ${{ github.workspace }}
+          working_directory: ${{ github.workspace }}
           soft_fail: true  # Don't fail the workflow, we'll handle the result
-          minimum_severity: HIGH
-          custom_args: --no-color
           format: json
           output_path: tfsec-results.json
 
