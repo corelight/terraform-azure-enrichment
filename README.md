@@ -20,6 +20,7 @@ module "enrichment" {
   enrichment_storage_account           = "<storage account where enrichment data will be centralized>"
   enrichment_storage_account_container = "<storage account container that will store the cloud resource data>"
   event_grid_system_topic_name         = "<name of the event grid system topic>"
+  event_grid_resource_group_name       = "<name of the resource group the event grid system topic is deployed>"
   location                             = "<Azure location where resources will be deployed>"
   subscription_id                      = "the ID (UUID) of the Azure Subscription where resources will be deployed>"
 
