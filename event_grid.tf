@@ -1,6 +1,6 @@
 resource "azurerm_eventgrid_system_topic_event_subscription" "event_subscription" {
   name                  = var.event_grid_subscription_name
-  resource_group_name   = var.resource_group_name
+  resource_group_name   = var.event_grid_system_topic_resource_group
   system_topic          = var.event_grid_system_topic_name
   event_delivery_schema = "CloudEventSchemaV1_0"
 
